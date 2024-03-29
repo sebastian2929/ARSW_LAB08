@@ -3,9 +3,9 @@
 
 ## Solucionado por:
 * Andres Felipe Arias Ajiaco
-> Cesar David Amaya Gómez
-> Johan Sebastián Gracia Martínez
-> Sebastián David Blanco Rodríguez
+* Cesar David Amaya Gómez
+* Johan Sebastián Gracia Martínez
+* Sebastián David Blanco Rodríguez
 
 ### Laboratorio - Broker de Mensajes STOMP con WebSockets + HTML5 Canvas.
 

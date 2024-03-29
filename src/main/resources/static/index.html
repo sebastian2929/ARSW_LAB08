@@ -15,31 +15,48 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="/webjars/jquery/jquery.min.js"></script>
-        <script src="/webjars/sockjs-client/sockjs.min.js"></script>
-        <script src="/webjars/stomp-websocket/stomp.min.js"></script>
-        <script src="/app.js"></script>
-
-    </head>
-
-    <body onload="app.init()">
-        <div>
-            <select id="connectionType" class="box">
-                <option value="/newpoint.">Draw</option>
-                <option value="/newsketch.">Sketch</option>
-            </select>
-            <label for="connectionId">Draw Number:</label>
-            <input id="connectionId" type="number"/>
-            <button onclick="app.connect()">Connect</button>
-        </div>
-        X:<input id="x" type="number"/>
-        Y:<input id="y" type="number"/>
-        <button onclick="app.publishPoint($('#x').val(),$('#y').val())">Send point</button>
-        <canvas id="canvas" width="800" height="600"></canvas>
-    </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 8</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body onload="app.init()">
+<div class="container">
+    <div class="controls">
+        <label for="connectionType">Select Mode:</label>
+        <select id="connectionType" class="mode-select">
+            <option value="/newpoint.">Draw</option>
+            <option value="/newpolygon.">Polygon</option>
+        </select>
+        <label for="connectionId">Draw Number:</label>
+        <input id="connectionId" type="number"/>
+        <button onclick="app.connect()" class="connect-btn">Connect</button>
+    </div>
+    <div id="point-controls" class="point-controls">
+        <label for="x">X:</label>
+        <input id="x" type="number" class="coordinate-input"/>
+        <label for="y">Y:</label>
+        <input id="y" type="number" class="coordinate-input"/>
+        <button onclick="app.publishPoint($('#x').val(),$('#y').val())" class="send-btn">Send Point</button>
+    </div>
+    <canvas id="canvas" width="800" height="600" class="canvas"></canvas>
+</div>
+<script src="/webjars/jquery/jquery.min.js"></script>
+<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+<script src="/app.js"></script>
+<script>
+    document.getElementById("connectionType").addEventListener("change", function() {
+        var mode = this.value;
+        if (mode === "/newpolygon.") {
+            document.getElementById("point-controls").style.display = "none";
+        } else {
+            document.getElementById("point-controls").style.display = "block";
+        }
+        app.setMode(mode); // Actualizar el modo en la aplicación
+    });
+</script>
+</body>
 </html>

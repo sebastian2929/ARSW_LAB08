@@ -7,23 +7,17 @@ var app = (function () {
         }        
     }
 
-    class Sketch{
-            constructor(points){
-                this.points = points;
-            }
-        }
-
     var stompClient = null;
 
-    var addPointToCanvas = function (point) {        
+    var addPointToCanvas = function (point) {
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
         ctx.beginPath();
         ctx.arc(point.x, point.y, 3, 0, 2 * Math.PI);
         ctx.stroke();
     };
-    
-    
+
+
     var getMousePosition = function (evt) {
         canvas = document.getElementById("canvas");
         var rect = canvas.getBoundingClientRect();
@@ -38,22 +32,32 @@ var app = (function () {
         console.info('Connecting to WS...');
         var socket = new SockJS('/stompendpoint');
         stompClient = Stomp.over(socket);
-        
+
         //subscribe to /topic/TOPICXX when connections succeed
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
             stompClient.subscribe('/topic/newpoint', function (eventbody) {
-                alert(eventbody);
+                var pt = JSON.parse(eventbody.body);
+                addPointToCanvas(pt);
             });
         });
 
     };
 
+
+
     return {
 
         init: function () {
             var can = document.getElementById("canvas");
-            
+            if(window.PointerEvent){
+                can.addEventListener("pointerdown", function(event){
+                    var pt = getMousePosition(event);
+                    addPointToCanvas(pt);
+                    stompClient.send("/topic/newpoint", {}, JSON.stringify(pt));
+                });
+            }
+
             //websocket connection
             connectAndSubscribe();
         },
